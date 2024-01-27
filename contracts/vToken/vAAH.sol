@@ -28,8 +28,8 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     /// @dev Max lock step (seconds of 208 week).
     uint256 internal constant MAX_STEP = 4 * 52 weeks;
 
-    /// @dev StakedDF address.
-    IERC20 internal stakedDF;
+    /// @dev StakedAAH address.
+    IERC20 internal stakedAAH;
 
     /// @dev veAAH total amount.
     uint96 public totalSupply;
@@ -62,21 +62,21 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     /**
      * @notice Only for the implementation contract, as for the proxy pattern,
      *            should call `initialize()` separately.
-     * @param _stakedDF Staked DF token address.
+     * @param _stakedAAH Staked AAH token address.
      */
-    constructor(IERC20 _stakedDF) {
-        initialize(_stakedDF);
+    constructor(IERC20 _stakedAAH) {
+        initialize(_stakedAAH);
     }
 
     /**
      * @dev Initialize contract to set some configs.
-     * @param _stakedDF Staked DF token address.
+     * @param _stakedAAH Staked AAH token address.
      */
-    function initialize(IERC20 _stakedDF) public initializer {
+    function initialize(IERC20 _stakedAAH) public initializer {
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
 
-        stakedDF = _stakedDF;
+        stakedAAH = _stakedAAH;
     }
 
     /**
@@ -150,7 +150,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
      * @notice Ensure this is the veAAH contract.
      * @return The return value is always true.
      */
-    function isvDF() external pure returns (bool) {
+    function isvAAH() external pure returns (bool) {
         return true;
     }
 
@@ -251,7 +251,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
 
     /**
      * @dev Calculate weight rate on duration.
-     * @param _amount Staked DF token amount.
+     * @param _amount Staked AAH token amount.
      * @param _duration Duration, in seconds.
      * @return veAAH amount.
      */
@@ -260,11 +260,11 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     }
 
     /**
-     * @notice Lock Staked DF and harvest veAAH.
+     * @notice Lock Staked AAH and harvest veAAH.
      * @dev Create lock-up information and mint veAAH on lock-up amount and duration.
      * @param _caller Caller address.
      * @param _recipient veAAH recipient address.
-     * @param _amount Staked DF token amount.
+     * @param _amount Staked AAH token amount.
      * @param _duration Duration, in seconds.
      * @param _minted The amount of veAAH minted.
      */
@@ -286,7 +286,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     }
 
     /**
-     * @notice Unlock Staked DF and burn veAAH.
+     * @notice Unlock Staked AAH and burn veAAH.
      * @dev Burn veAAH and clear lock information.
      * @param _caller Caller address.
      * @param _from veAAH holder's address.
@@ -299,7 +299,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     }
 
     /**
-     * @notice Unlock Staked DF and burn veAAH.
+     * @notice Unlock Staked AAH and burn veAAH.
      * @dev Burn veAAH and clear lock information.
      * @param _caller Caller address.
      * @param _from veAAH holder's address.
@@ -320,29 +320,29 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     /*********************************/
 
     /**
-     * @notice Lock Staked DF and harvest veAAH.
+     * @notice Lock Staked AAH and harvest veAAH.
      * @dev Create lock-up information and mint veAAH on lock-up amount and duration.
      * @param _recipient veAAH recipient address.
-     * @param _amount Staked DF token amount.
+     * @param _amount Staked AAH token amount.
      * @param _duration Duration, in seconds.
      * @return The amount of veAAH minted.
      */
     function create(address _recipient, uint256 _amount, uint256 _duration) external onlyMinter nonReentrant returns (uint96) {
-        stakedDF.safeTransferFrom(msg.sender, address(this), _amount);
+        stakedAAH.safeTransferFrom(msg.sender, address(this), _amount);
         return _lock(msg.sender, _recipient, _amount, _duration);
     }
 
     /**
-     * @notice Increased locked staked DF and harvest veAAH.
+     * @notice Increased locked staked AAH and harvest veAAH.
      * @dev According to the expiration time in the lock information, the minted veAAH.
      * @param _recipient veAAH recipient address.
-     * @param _amount Staked DF token amount.
+     * @param _amount Staked AAH token amount.
      * @param _refilled The amount of veAAH minted.
      */
     function refill(address _recipient, uint256 _amount) external onlyMinter nonReentrant isDueTimeValid(lockers[_recipient].dueTime) returns (uint96 _refilled) {
         require(_amount > 0, "not allowed to add zero amount in lock-up");
 
-        stakedDF.safeTransferFrom(msg.sender, address(this), _amount);
+        stakedAAH.safeTransferFrom(msg.sender, address(this), _amount);
 
         Locker storage _locker = lockers[_recipient];
         _refilled = _weightedExchange(_amount, uint256(_locker.dueTime) - block.timestamp);
@@ -354,7 +354,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
 
     /**
      * @notice Increase the lock duration and harvest veAAH.
-     * @dev According to the amount of locked staked DF and expansion time, the minted veAAH.
+     * @dev According to the amount of locked staked AAH and expansion time, the minted veAAH.
      * @param _recipient veAAH recipient address.
      * @param _duration Duration, in seconds.
      * @param _extended The amount of veAAH minted.
@@ -373,7 +373,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     }
 
     /**
-     * @notice Unlock Staked DF and burn veAAH.(transfer to msg.sender)
+     * @notice Unlock Staked AAH and burn veAAH.(transfer to msg.sender)
      * @dev Burn veAAH and clear lock information.
      * @param _from veAAH holder's address.
      * @param _unlocked The amount of veAAH burned.
@@ -381,11 +381,11 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     function withdraw(address _from) external onlyMinter nonReentrant returns (uint96 _unlocked) {
         uint256 _amount = lockers[_from].amount;
         _unlocked = _unLock(msg.sender, _from);
-        stakedDF.safeTransfer(msg.sender, _amount);
+        stakedAAH.safeTransfer(msg.sender, _amount);
     }
 
     /**
-     * @notice Unlock Staked DF and burn veAAH.(transfer to _from)
+     * @notice Unlock Staked AAH and burn veAAH.(transfer to _from)
      * @dev Burn veAAH and clear lock information.
      * @param _from veAAH holder's address.
      * @param _unlocked The amount of veAAH burned.
@@ -393,21 +393,21 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     function withdraw2(address _from) external onlyMinter nonReentrant returns (uint96 _unlocked) {
         uint256 _amount = lockers[_from].amount;
         _unlocked = _unLock(msg.sender, _from);
-        stakedDF.safeTransfer(_from, _amount);
+        stakedAAH.safeTransfer(_from, _amount);
     }
 
     /**
-     * @notice Lock Staked DF and and update veAAH balance.(transfer to msg.sender)
-     * @dev Update the lockup information and veAAH balance, return the excess sDF to the user or receive transfer increased amount.
+     * @notice Lock Staked AAH and and update veAAH balance.(transfer to msg.sender)
+     * @dev Update the lockup information and veAAH balance, return the excess sAAH to the user or receive transfer increased amount.
      * @param _recipient veAAH recipient address.
-     * @param _amount Staked DF token new amount.
+     * @param _amount Staked AAH token new amount.
      * @param _duration New duration, in seconds.
      * @param _refreshed veAAH new balance.
      */
     function refresh(address _recipient, uint256 _amount, uint256 _duration) external onlyMinter nonReentrant returns (uint96 _refreshed, uint256 _refund) {
         uint256 outstanding = uint256(lockers[_recipient].amount);
         if (_amount > outstanding) {
-            stakedDF.safeTransferFrom(msg.sender, address(this), _amount - outstanding);
+            stakedAAH.safeTransferFrom(msg.sender, address(this), _amount - outstanding);
         }
 
         _unLock(msg.sender, _recipient);
@@ -415,41 +415,41 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
 
         if (_amount < outstanding) {
             _refund = outstanding - _amount;
-            stakedDF.safeTransfer(msg.sender, _refund);
+            stakedAAH.safeTransfer(msg.sender, _refund);
         }
     }
 
     /**
-     * @notice Lock Staked DF and and update veAAH balance.(transfer to _recipient)
-     * @dev Update the lockup information and veAAH balance, return the excess sDF to the user or receive transfer increased amount.
+     * @notice Lock Staked AAH and and update veAAH balance.(transfer to _recipient)
+     * @dev Update the lockup information and veAAH balance, return the excess sAAH to the user or receive transfer increased amount.
      * @param _recipient veAAH recipient address.
-     * @param _amount Staked DF token new amount.
+     * @param _amount Staked AAH token new amount.
      * @param _duration New duration, in seconds.
      * @param _refreshed veAAH new balance.
      */
     function refresh2(address _recipient, uint256 _amount, uint256 _duration) external onlyMinter nonReentrant returns (uint96 _refreshed) {
         uint256 outstanding = uint256(lockers[_recipient].amount);
         if (_amount > outstanding) {
-            stakedDF.safeTransferFrom(msg.sender, address(this), _amount - outstanding);
+            stakedAAH.safeTransferFrom(msg.sender, address(this), _amount - outstanding);
         }
 
         _unLock(msg.sender, _recipient);
         _refreshed = _lock(msg.sender, _recipient, _amount, _duration);
 
-        if (_amount < outstanding) stakedDF.safeTransfer(_recipient, outstanding - _amount);
+        if (_amount < outstanding) stakedAAH.safeTransfer(_recipient, outstanding - _amount);
     }
 
     /**
-     * @notice If not expired, relock Staked DF and update veAAH balance.(transfer to _recipient)
+     * @notice If not expired, relock Staked AAH and update veAAH balance.(transfer to _recipient)
      * @dev Update the lockup information and veAAH balance.
      * @param _recipient veAAH recipient address.
-     * @param _amount Staked DF token new amount.
+     * @param _amount Staked AAH token new amount.
      * @param _duration New duration, in seconds.
      * @param _minted veAAH new balance.
      */
     function proExtend(address _recipient, uint256 _amount, uint256 _duration) external onlyMinter nonReentrant isDueTimeValid(lockers[_recipient].dueTime) returns (uint96 _minted) {
         if (_amount > 0) {
-            stakedDF.safeTransferFrom(msg.sender, address(this), _amount);
+            stakedAAH.safeTransferFrom(msg.sender, address(this), _amount);
         }
 
         Locker memory _locker = lockers[_recipient];
@@ -488,7 +488,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
      * @return Information of the locker.
      *         due time;
      *         Lock up duration;
-     *         Lock up sDF amount;
+     *         Lock up sAAH amount;
      */
     function getLocker(address _lockerAddress) external view returns (uint32, uint32, uint96) {
         Locker storage _locker = lockers[_lockerAddress];
@@ -498,7 +498,7 @@ contract veAAH is OwnableUpgradeable, ReentrancyGuardUpgradeable, GovernanceToke
     /**
      * @dev Calculate the expected amount of users.
      * @param _lockerAddress veAAH locker address.
-     * @param _amount Staked DF token amount.
+     * @param _amount Staked AAH token amount.
      * @param _duration Duration, in seconds.
      * @return veAAH amount.
      */
