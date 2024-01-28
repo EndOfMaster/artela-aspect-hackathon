@@ -1,0 +1,1395 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					}
+				],
+				"name": "AddressEmptyCode",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "AddressInsufficientBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FailedInnerCall",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidInitialization",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotInitializing",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "OwnableInvalidOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "OwnableUnauthorizedAccount",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ReentrancyGuardReentrantCall",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "SafeERC20FailedOperation",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "sAAHLocked",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "veAAHReceived",
+						"type": "uint256"
+					}
+				],
+				"name": "Create",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "preDueTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newDueTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "veAAHReceived",
+						"type": "uint256"
+					}
+				],
+				"name": "Extend",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint64",
+						"name": "version",
+						"type": "uint64"
+					}
+				],
+				"name": "Initialized",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "preDueTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newDueTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "veAAHOldBalance",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "veAAHBalance",
+						"type": "uint256"
+					}
+				],
+				"name": "ProExtend",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "sAAHRefilled",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "veAAHReceived",
+						"type": "uint256"
+					}
+				],
+				"name": "Refill",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "presAAHLocked",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newsAAHLocked",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "preveAAHBalance",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newveAAHBalance",
+						"type": "uint256"
+					}
+				],
+				"name": "Refresh",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					}
+				],
+				"name": "RewardPaid",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "oldRewardRate",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newRewardRate",
+						"type": "uint256"
+					}
+				],
+				"name": "RewardRateUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Staked",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "veAAHBurned",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "sAAHRefunded",
+						"type": "uint256"
+					}
+				],
+				"name": "Withdraw",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Withdrawn",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "accSettledBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_lockerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_duration",
+						"type": "uint256"
+					}
+				],
+				"name": "calcBalanceReceived",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_dueTime",
+						"type": "uint256"
+					}
+				],
+				"name": "create",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_account",
+						"type": "address"
+					}
+				],
+				"name": "earned",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_lockerAddress",
+						"type": "address"
+					}
+				],
+				"name": "estimateLockerAPY",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "exit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_dueTime",
+						"type": "uint256"
+					}
+				],
+				"name": "extend",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_lockerAddress",
+						"type": "address"
+					}
+				],
+				"name": "getLocker",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint96",
+						"name": "",
+						"type": "uint96"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_lockerAddress",
+						"type": "address"
+					}
+				],
+				"name": "getLockerInfo",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "_startTime",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "_dueTime",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "_duration",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint96",
+						"name": "_sAAHAmount",
+						"type": "uint96"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_veAAHAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_stakedveAAH",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_rewardAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_lockedStatus",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getLockersInfo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getReward",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IveAAH",
+						"name": "_veAAH",
+						"type": "address"
+					},
+					{
+						"internalType": "contract IStakedAAH",
+						"name": "_sAAH",
+						"type": "address"
+					},
+					{
+						"internalType": "contract IERC20",
+						"name": "_rewardToken",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_rewardDistributor",
+						"type": "address"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lastRateUpdateTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lastSettledTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lastUpdateTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "proExtend",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "refill",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_dueTime",
+						"type": "uint256"
+					}
+				],
+				"name": "refresh",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					}
+				],
+				"name": "rescueTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardDistributed",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardDistributedStored",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardDistributor",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardPerToken",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardPerTokenStored",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardRate",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardToken",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "rewards",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "sAAH",
+				"outputs": [
+					{
+						"internalType": "contract IStakedAAH",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_rewardRate",
+						"type": "uint256"
+					}
+				],
+				"name": "setRewardRate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "startTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "userRewardPerTokenPaid",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "veAAH",
+				"outputs": [
+					{
+						"internalType": "contract IveAAH",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "The contract does not store parameters such as the number of SAAHs",
+			"errors": {
+				"AddressEmptyCode(address)": [
+					{
+						"details": "There's no code at `target` (it is not a contract)."
+					}
+				],
+				"AddressInsufficientBalance(address)": [
+					{
+						"details": "The ETH balance of the account is not enough to perform the operation."
+					}
+				],
+				"FailedInnerCall()": [
+					{
+						"details": "A call to an address target failed. The target may have reverted."
+					}
+				],
+				"InvalidInitialization()": [
+					{
+						"details": "The contract is already initialized."
+					}
+				],
+				"NotInitializing()": [
+					{
+						"details": "The contract is not initializing."
+					}
+				],
+				"OwnableInvalidOwner(address)": [
+					{
+						"details": "The owner is not a valid owner account. (eg. `address(0)`)"
+					}
+				],
+				"OwnableUnauthorizedAccount(address)": [
+					{
+						"details": "The caller account is not authorized to perform an operation."
+					}
+				],
+				"ReentrancyGuardReentrantCall()": [
+					{
+						"details": "Unauthorized reentrant call."
+					}
+				],
+				"SafeERC20FailedOperation(address)": [
+					{
+						"details": "An operation with an ERC20 token failed."
+					}
+				]
+			},
+			"events": {
+				"Create(address,uint256,uint256,uint256)": {
+					"details": "Emitted when `create` is called.",
+					"params": {
+						"duration": "Lock duration",
+						"recipient": "Address of receiving veAAH",
+						"sAAHLocked": "Number of locked sAAH",
+						"veAAHReceived": "Number of veAAH received"
+					}
+				},
+				"Extend(address,uint256,uint256,uint256,uint256)": {
+					"details": "Emitted when `extend` is called.",
+					"params": {
+						"duration": "Lock duration",
+						"newDueTime": "New expiration time",
+						"preDueTime": "Old expiration time",
+						"recipient": "Address of receiving veAAH",
+						"veAAHReceived": "Number of veAAH received"
+					}
+				},
+				"Initialized(uint64)": {
+					"details": "Triggered when the contract has been initialized or reinitialized."
+				},
+				"Refill(address,uint256,uint256)": {
+					"details": "Emitted when `refill` is called.",
+					"params": {
+						"recipient": "Address of receiving veAAH",
+						"sAAHRefilled": "Increased number of sAAH",
+						"veAAHReceived": "Number of veAAH received"
+					}
+				},
+				"Refresh(address,uint256,uint256,uint256,uint256,uint256)": {
+					"details": "Emitted when `refresh` is called.",
+					"params": {
+						"duration": "Lock duration",
+						"newsAAHLocked": "New number of locked sAAH",
+						"newveAAHBalance": "New of veAAH balance",
+						"presAAHLocked": "Old number of locked sAAH",
+						"preveAAHBalance": "Original veAAH balance",
+						"recipient": "Address of receiving veAAH"
+					}
+				},
+				"Withdraw(address,uint256,uint256)": {
+					"details": "Emitted when `withdraw` is called.",
+					"params": {
+						"recipient": "Address of receiving veAAH",
+						"sAAHRefunded": "Number of sAAH returned",
+						"veAAHBurned": "Amount of veAAH burned"
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"calcBalanceReceived(address,uint256,uint256)": {
+					"details": "Calculate the expected amount of users.",
+					"params": {
+						"_amount": "StakedAAH token amount.",
+						"_duration": "Duration, in seconds.",
+						"_lockerAddress": "veAAH locker address."
+					},
+					"returns": {
+						"_0": "veAAH amount."
+					}
+				},
+				"create(uint256,uint256)": {
+					"details": "Create lock-up information and mint veAAH on lock-up amount and duration.",
+					"params": {
+						"_amount": "StakedAAH token amount.",
+						"_dueTime": "Due time timestamp, in seconds."
+					}
+				},
+				"estimateLockerAPY(address)": {
+					"details": "Calculate the expected annual interest rate of users.",
+					"params": {
+						"_lockerAddress": "veAAH locker address."
+					},
+					"returns": {
+						"_0": "annual interest."
+					}
+				},
+				"extend(uint256)": {
+					"details": "According to the amount of locked StakedAAH and expansion time, the minted veAAH.",
+					"params": {
+						"_dueTime": "new Due time timestamp, in seconds."
+					}
+				},
+				"getLocker(address)": {
+					"details": "Used to query the information of the locker.",
+					"params": {
+						"_lockerAddress": "veAAH locker address."
+					},
+					"returns": {
+						"_0": "Information of the locker.         due time;         Lock up duration;         Lock up sAAH amount;"
+					}
+				},
+				"getLockerInfo(address)": {
+					"details": "Used to query the information of the locker.",
+					"params": {
+						"_dueTime": "Due time.",
+						"_duration": "Lock up duration.",
+						"_lockedStatus": "Locked status, 0: no lockup; 1: locked; 2: Lock expired.",
+						"_lockerAddress": "veAAH locker address.",
+						"_rewardAmount": "Reward amount.",
+						"_sAAHAmount": "Lock up sAAH amount.",
+						"_startTime": "Start time.",
+						"_veAAHAmount": "veAAH amount."
+					}
+				},
+				"getLockersInfo()": {
+					"details": "Query veAAH lock information.",
+					"returns": {
+						"_0": "veAAH total supply.         Total locked sAAH         Total settlement due         Reward rate per second"
+					}
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"proExtend(uint256)": {
+					"details": "According to the amount of locked StakedAAH and expansion time, the minted veAAH."
+				},
+				"refill(uint256)": {
+					"details": "According to the expiration time in the lock information, the minted veAAH.",
+					"params": {
+						"_amount": "StakedAAH token amount."
+					}
+				},
+				"refresh(uint256,uint256)": {
+					"details": "Update the lockup information and veAAH balance, return the excess sAAH to the user or receive transfer increased amount.",
+					"params": {
+						"_amount": "StakedAAH token new amount.",
+						"_dueTime": "Due time timestamp, in seconds."
+					}
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				}
+			},
+			"stateVariables": {
+				"MIN_STEP": {
+					"details": "Min lock step (seconds of a week)."
+				},
+				"accSettledBalance": {
+					"details": "Total overdue balance settled"
+				},
+				"lastSettledTime": {
+					"details": "Due time of settlement to node"
+				},
+				"nodes": {
+					"details": "due time timestamp => data"
+				},
+				"rewardToken": {
+					"details": "Token of reward"
+				},
+				"startTime": {
+					"details": "The timestamp that started to distribute token reward."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"create(uint256,uint256)": {
+					"notice": "Lock StakedAAH and harvest veAAH."
+				},
+				"extend(uint256)": {
+					"notice": "Increase the lock duration and harvest veAAH."
+				},
+				"getReward()": {
+					"notice": "Extract reward"
+				},
+				"proExtend(uint256)": {
+					"notice": "Increase the lock duration and harvest veAAH, Let the total lock up time exceed 4 years"
+				},
+				"refill(uint256)": {
+					"notice": "Increased locked staked sAAH and harvest veAAH."
+				},
+				"refresh(uint256,uint256)": {
+					"notice": "Lock Staked sAAH and and update veAAH balance."
+				},
+				"setRewardRate(uint256)": {
+					"notice": "Set a new reward rate"
+				}
+			},
+			"notice": "Minter of veAAH",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/veDFManager/veAAHManager.sol": "veAAHCore"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
+			"keccak256": "0xc163fcf9bb10138631a9ba5564df1fa25db9adff73bd9ee868a8ae1858fe093a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9706d43a0124053d9880f6e31a59f31bc0a6a3dc1acd66ce0a16e1111658c5f6",
+				"dweb:/ipfs/QmUFmfowzkRwGtDu36cXV9SPTBHJ3n7dG9xQiK5B28jTf2"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+			"keccak256": "0x631188737069917d2f909d29ce62c4d48611d326686ba6683e26b72a23bfac0b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7a61054ae84cd6c4d04c0c4450ba1d6de41e27e0a2c4f1bcdf58f796b401c609",
+				"dweb:/ipfs/QmUvtdp7X1mRVyC3CsHrtPbgoqWaXHp3S1ZR24tpAQYJWM"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
+			"keccak256": "0xdbef5f0c787055227243a7318ef74c8a5a1108ca3a07f2b3a00ef67769e1e397",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://08e39f23d5b4692f9a40803e53a8156b72b4c1f9902a88cd65ba964db103dab9",
+				"dweb:/ipfs/QmPKn6EYDgpga7KtpkA8wV2yJCYGMtc9K4LkJfhKX2RVSV"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol": {
+			"keccak256": "0xb44e086e941292cdc7f440de51478493894ef0b1aeccb0c4047445919f667f74",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://942dad22fbdc1669f025540ba63aa3ccfad5f8458fc5d4525b31ebf272e7af45",
+				"dweb:/ipfs/Qmdo4X2M82aM3AMoW2kf2jhYkSCyC4T1pHNd6obdsDFnAB"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0ea104e577e63faea3b69c415637e99e755dcbf64c5833d7140c35a714d6d90c",
+				"dweb:/ipfs/Qmau6x4Ns9XdyynRCNNp3RhLqijJjFm7z5fyZazfYFGYdq"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol": {
+			"keccak256": "0x6008dabfe393240d73d7dd7688033f72740d570aa422254d29a7dce8568f3aff",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f5196ec75139918c6c7bb4251b36395e668f1fa6d206beba7e7520e74913940d",
+				"dweb:/ipfs/QmSyqjksXxmm2mCG6qRd1yuwLykypkSVBbnBnGqJRcuJMi"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x37bb49513c49c87c4642a891b13b63571bc87013dde806617aa1efb54605f386",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b3036b3a83b7c48f96641f2a9002b9f2dcb6a5958dd670894ada21ae8229b3d0",
+				"dweb:/ipfs/QmUNfSBdoVtjhETaUJCYcaC7pTMgbhht926tJ2uXJbiVd3"
+			]
+		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0xaf28a975a78550e45f65e559a3ad6a5ad43b9b8a37366999abd1b7084eb70721",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b7bd24e224f67f65bfadf85dc2929fa965456bb2415478bd0125471b5ce35245",
+				"dweb:/ipfs/QmRaydGr8BTHs1kvaZfsNU69pKzUAGFrvABn1KiRSbE51y"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0x005ec64c6313f0555d59e278f9a7a5ab2db5bdc72a027f255a37c327af1ec02d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4ece9f0b9c8daca08c76b6b5405a6446b6f73b3a15fab7ff56e296cbd4a2c875",
+				"dweb:/ipfs/QmQyRpyPRL5SQuAgj6SHmbir3foX65FJjbVTTQrA2EFg6L"
+			]
+		},
+		"contracts/interface/IRewardDistributor.sol": {
+			"keccak256": "0x57dc6dee68a32f4faef7d1af1f7939eefff3e45f5edae5368cb005cc3b9c4a24",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d376541161b5825290689ce9b47f06ca5271a92d8f743b826fe378d4f513394d",
+				"dweb:/ipfs/QmeMk91gR9iziFYrYPmPNNUsCJpn4VvTV457ek8nhfnsv9"
+			]
+		},
+		"contracts/interface/IStakedAAH.sol": {
+			"keccak256": "0x4ddb85cf6b3ae9ae58591055c252cfcccd8d403a29c5017c59768c82815fd426",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://269f2eac91df4de32180e805fe76691e85399cf515435da71a284af145b9f834",
+				"dweb:/ipfs/QmbTh15FdZZ9Zn5gP298DsQHgNFBFnFKVwyD3LNoSfgLvc"
+			]
+		},
+		"contracts/interface/IveAAH.sol": {
+			"keccak256": "0x72d3c98c7659df05b219bb64952ad39a85ffc9e725e861d4d3f97cd839709784",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d74f7e58e3452a91d17cee62a7f15122b01616e4212c6875978be4c1afbc1705",
+				"dweb:/ipfs/QmQq8mYPKkk42tjrHM6HidSQUZm7usBwTT8TMeKiYtQ8Lw"
+			]
+		},
+		"contracts/library/SafeRatioMath.sol": {
+			"keccak256": "0x6231c863b31151eb306952bb8c446a1c43503054e1c286f691087419f9a28f0c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9884228e302f0f8972e3060404e99adb617fcb767c44473064c70e112bdee4db",
+				"dweb:/ipfs/QmSGcjfhPs6gubVdtKwuC1SbLJok3ayemYQ9rawSiuWhYb"
+			]
+		},
+		"contracts/veDFManager/LPTokenWrapper.sol": {
+			"keccak256": "0xef135c1dd10afa4e3c98ebc26a34e303445d0ccd9cef697005f46bea71c095d3",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4fac81fa9e57e29197cfc7b328eb366f76b0f54eb782ab2c4cca34265b542ccd",
+				"dweb:/ipfs/QmP2y2RbhSz7adKAGfnduDj3BRkLpZthHQSrx3HvNbmzhg"
+			]
+		},
+		"contracts/veDFManager/veAAHManager.sol": {
+			"keccak256": "0x4255b7192db24c469de0d7082ac26091efe327efd004fae986cc79f6fea59a79",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3a3e8c05791898eac56736b455fa610713cc63aa0f101ed68fbe6909f71603b5",
+				"dweb:/ipfs/QmaLBSK29B6meaaVJ2p1aPimXq9Rwyp23Gc9UMbi4YpFaH"
+			]
+		}
+	},
+	"version": 1
+}
