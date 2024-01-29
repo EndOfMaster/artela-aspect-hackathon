@@ -180,32 +180,9 @@ contract veAAHCore is OwnableUpgradeable, ReentrancyGuardUpgradeable, LPTokenWra
     }
 
     /*********************************/
-    /****** Internal functions *******/
-    /*********************************/
-
-    //TODO 迁移部分
-    ///@dev Update the reward of specific users
-    // function _updateUserReward(address _account) private {
-    //     (uint32 _dueTime, , ) = veAAH.getLocker(_account);
-    //     uint256 _rewardPerTokenStored = rewardPerTokenStored;
-
-    //     if (_dueTime > 0) {
-    //         //If the user's lock expires, retrieve the rewardpertokenstored of the expired node
-    //         if (_dueTime < block.timestamp) {
-    //             _rewardPerTokenStored = nodes[_dueTime].rewardPerTokenSettled;
-    //         }
-
-    //         rewards[_account] = balances[_account].rmul(_rewardPerTokenStored.sub(userRewardPerTokenPaid[_account])).add(rewards[_account]);
-    //     }
-
-    //     userRewardPerTokenPaid[_account] = _rewardPerTokenStored;
-    // }
-
-    /*********************************/
     /******* Users functions *********/
     /*********************************/
 
-    //TODO 用户操作的数据通过Aspect Context传输到aspect
     /**
      * @notice Lock StakedAAH and harvest veAAH.
      * @dev Create lock-up information and mint veAAH on lock-up amount and duration.
@@ -217,13 +194,14 @@ contract veAAHCore is OwnableUpgradeable, ReentrancyGuardUpgradeable, LPTokenWra
         sAAH.safeTransferFrom(msg.sender, address(this), _amount);
         uint256 _veAAHAmount = veAAH.create(msg.sender, _amount, _duration);
 
-        totalSupply = totalSupply + _veAAHAmount;
-        balances[msg.sender] = balances[msg.sender] + _veAAHAmount;
-        nodes[_dueTime].balance = nodes[_dueTime].balance + _veAAHAmount;
+        string memory _context = string(abi.encodePacked(_dueTime, ",", _veAAHAmount));
+        (bool success, ) = address(0x66).call(abi.encode(string("context"), _context));
+        require(success, "veAAHManager: send aspect contect error");
 
         emit Create(msg.sender, _amount, _duration, _veAAHAmount);
     }
 
+    //TODO 到这了
     /**
      * @notice Increased locked staked sAAH and harvest veAAH.
      * @dev According to the expiration time in the lock information, the minted veAAH.

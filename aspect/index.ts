@@ -10,7 +10,7 @@ import {
     ethereum,
     sys,
     BigInt,
-    UintData
+    UintData,
 } from "@artela/aspect-libs";
 import { Protobuf } from 'as-proto/assembly';
 
@@ -81,12 +81,15 @@ class Aspect implements IPostContractCallJP, IPreContractCallJP {
             const _now = sys.hostApi.runtimeContext.get("block.header.timestamp");
             const now = BigInt.from(Protobuf.decode<UintData>(_now, UintData.decode).data.toString());
 
-            //settle主体
-            while (lastSettledTime.lt(now)) {
-                const _nodeRewardPerTokenSettled = sys.aspect.mutableState.get<BigInt>("{nodes}_{" + lastSettledTime + "}");
-                let nodeRewardPerTokenSettled = _nodeRewardPerTokenSettled.unwrap();
+            //1. Update the expired lock of the history node and calculate the `rewardPerToken` at that time
 
-                const nodeBalance = sys.aspect.mutableState.get<BigInt>("{nodes}_{" + lastSettledTime + "}").unwrap();
+            while (lastSettledTime.lt(now)) {
+
+                const _node = sys.aspect.mutableState.get<string>("{nodes}_{" + lastSettledTime + "}");
+                const nodeStr = _node.unwrap().split(",")
+
+                let nodeRewardPerTokenSettled = BigInt.from(nodeStr[0]);
+                const nodeBalance = BigInt.from(nodeStr[1]);
 
                 if (nodeBalance.gt(0)) {
                     rewardPerToken = rewardPerToken.add(lastSettledTime.sub(lastUpdateTime).mul(rewardRate).mul(BASE).div(totalSupply.sub(accSettledBalance)));
@@ -96,7 +99,8 @@ class Aspect implements IPostContractCallJP, IPreContractCallJP {
 
                     //Record node settlement results
                     nodeRewardPerTokenSettled = rewardPerToken;
-                    _nodeRewardPerTokenSettled.set<BigInt>(nodeRewardPerTokenSettled);
+                    _node.set<string>(nodeRewardPerTokenSettled + "," + nodeBalance);
+                    _node.reload();
 
                     //The first settlement is the time from the last operation to the first one behind it,
                     //and then updated to the next node time
@@ -127,7 +131,35 @@ class Aspect implements IPostContractCallJP, IPreContractCallJP {
             _rewardPerToken.reload();
 
             _lastUpdateTime.set<BigInt>(now);
-            _lastUpdateTime.reload()
+            _lastUpdateTime.reload();
+
+
+            //2. Update the reward of specific users
+
+            const dueTime = sys.aspect.mutableState.get<BigInt>("{dueTimes}_{" + input.call!.from + "}").unwrap();
+            const _userRewardPerTokenPaid = sys.aspect.mutableState.get<BigInt>("{userRewardPerTokenPaid}_{" + input.call!.from + "}");
+
+            if (dueTime.gt(0)) {
+                //If the user's lock expires, retrieve the rewardpertokenstored of the expired node
+                if (dueTime.lt(now)) {
+                    const _node = sys.aspect.mutableState.get<string>("{nodes}_{" + lastSettledTime + "}");
+                    const nodeStr = _node.unwrap().split(",")
+
+                    let nodeRewardPerTokenSettled = BigInt.from(nodeStr[0]);
+                    rewardPerToken = nodeRewardPerTokenSettled;
+                }
+                const veBalance = sys.aspect.mutableState.get<BigInt>("{balances}_{" + input.call!.from + "}").unwrap();
+                let userRewardPerTokenPaid = _userRewardPerTokenPaid.unwrap();
+
+                const _reward = sys.aspect.mutableState.get<BigInt>("{rewards}_{" + input.call!.from + "}");
+                let reward = _reward.unwrap();
+
+                reward = veBalance.mul(rewardPerToken.sub(userRewardPerTokenPaid)).div(BASE).add(reward);
+                _reward.set<BigInt>(reward);
+                _reward.reload()
+            }
+
+            _userRewardPerTokenPaid.set<BigInt>(rewardPerToken);
         }
     }
 
@@ -137,15 +169,39 @@ class Aspect implements IPostContractCallJP, IPreContractCallJP {
      * @param input input to the current join point
      */
     postContractCall(input: PostContractCallInput): void {
-        //TODO 判断每个操作的进入参数
+        const selector = ethereum.parseMethodSig(input.call!.data);
+
+        // create locker
+        if (selector === createSig) {
+            const _params = sys.aspect.transientStorage.get<string>('context').unwrap();
+            const params = _params.split(",");
+            const dueTime = params[0];
+            const veAAHAmount = params[1];
+
+            const _totalSupply = sys.aspect.mutableState.get<BigInt>("totalSupply");
+            let totalSupply = _totalSupply.unwrap()
+            _totalSupply.set<BigInt>(totalSupply.add(veAAHAmount))
+            _totalSupply.reload();
+
+            const _balance = sys.aspect.mutableState.get<BigInt>("{balances}_{" + input.call!.from + "}")
+            let balance = _balance.unwrap();
+            _balance.set<BigInt>(balance.add(veAAHAmount));
+            _balance.reload()
+
+            const _node = sys.aspect.mutableState.get<string>("{nodes}_{" + dueTime + "}");
+            const nodeStr = _node.unwrap().split(",")
+
+            const nodeRewardPerTokenSettled = nodeStr[0];
+            const nodeBalance = BigInt.from(nodeStr[1]);
+
+            _node.set<string>(nodeRewardPerTokenSettled + "," + nodeBalance.add(veAAHAmount));
+            _node.reload();
+        }
+
+        
 
     }
 }
-
-function rdiv(a: BigInt, b: BigInt) {
-    return a.mul(BASE).div(b);
-}
-
 
 // 2.register aspect Instance
 const aspect = new Aspect()
